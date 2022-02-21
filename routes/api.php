@@ -6,6 +6,7 @@ use App\Services\EnderecoService;
 use App\Services\EstabelecimentoService;
 use App\Services\PerfilService;
 use App\Services\PerguntaEmergenciaService;
+use App\Services\QuestionarioEmergenciaService;
 use Illuminate\Http\Request;
 use App\Services\UsuarioService;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/usuarios', function(Request $request){
     return UsuarioService::getAll(true);
 });
-Route::prefix('usuarios')->group(function () {
+Route::prefix('usuario')->group(function () {
     Route::get('/{id}', function($id){
         return UsuarioService::findJson($id??0);
     });
@@ -74,15 +75,22 @@ Route::prefix('perfil')->group(function () {
 Route::get('/perguntas-emergencia', function(Request $request){
     return PerguntaEmergenciaService::getAll(true);
 });
-Route::prefix('perguntas-emergencia')->group(function () {
+Route::prefix('pergunta-emergencia')->group(function () {
     Route::get('/{id}', function($id){
         return PerguntaEmergenciaService::findJson($id??0);
     });
 });
 
+Route::get('/questionarios-emergencia', function(Request $request){
+    return QuestionarioEmergenciaService::getAll(true);
+});
+Route::prefix('questionario-emergencia')->group(function () {
+    Route::get('/{id}', function($id){
+        return QuestionarioEmergenciaService::findJson($id??0);
+    });
+});
+
+
 Route::get('/permissoes-perfis', function(Request $request){
     // return PermissoesPerfisService::getAll(true);
-});
-Route::get('/questionario-emergencia', function(Request $request){
-    // return QuestionarioEmergenciaService::getAll(true);
 });
