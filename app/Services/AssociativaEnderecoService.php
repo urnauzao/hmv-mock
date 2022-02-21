@@ -41,15 +41,21 @@ class AssociativaEnderecoService
         $enderecos_sem_associacao = self::enderecos_sem_associacao();
 
         if($enderecos_sem_associacao->count() === 0){
-            foreach($estabelecimentos_sem_endereco as $estabelecimentos){
+            foreach($estabelecimentos_sem_endereco as $estabelecimento){
+                EnderecoService::mock();
+            }
+            foreach($usuarios_sem_endereco as $usuarios){
                 EnderecoService::mock();
             }
             $enderecos_sem_associacao = self::enderecos_sem_associacao();
         }
 
+        if($usuarios_sem_endereco)
         foreach($usuarios_sem_endereco as $usuario){
             $endereco = $enderecos_sem_associacao->first();
-
+            if(!$endereco){
+                dd($endereco, $usuarios_sem_endereco->count());
+            }
             $associativa = new AssociativaEndereco();
             $associativa->usuario_id = $usuario->id;
             $associativa->endereco_id = $endereco->id;
@@ -58,8 +64,12 @@ class AssociativaEnderecoService
             $enderecos_sem_associacao = $enderecos_sem_associacao->whereNotIn('id', $endereco->id);
         }
 
+        if($estabelecimentos_sem_endereco)
         foreach($estabelecimentos_sem_endereco as $estabelecimento){
             $endereco = $enderecos_sem_associacao->first();
+            if(!$endereco){
+                dd($endereco, $estabelecimentos_sem_endereco->count());
+            }
             $associativa = new AssociativaEndereco();
             $associativa->estabelecimento_id = $estabelecimento->id;
             $associativa->endereco_id = $endereco->id;

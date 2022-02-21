@@ -23,7 +23,7 @@ class EnderecoService
         $endereco->cidade = $faker->city();
         $endereco->estado = $faker->stateAbbr();
         $endereco->pais = 'Brasil';
-        $endereco->complemento = rand(1,9) > 7 ? str_split($faker->address(), 60) : null;
+        $endereco->complemento = rand(1,9) > 7 ? substr($faker->address(), 0, 60) : null;
         $endereco->deleted_at = rand(1, 100) == 1 ? now()->toDateString() : null;
         $endereco->save();
     }
