@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->id();
-            $table->date('data')->useCurrent();
+            $table->timestamp('data')->useCurrent();
             $table->enum('situacao', ['0', '1', '2', '3', '4'])
             ->default('4')
             ->comment('0 -> Agendado, 1 -> Na espera, 2 -> Em realização, 3 -> Realizado, 4 -> Não realizado');
-            $table->text('observacoes');
+            $table->text('observacoes')->nullable();
             $table->unsignedBigInteger('paciente_perfil_id')->nullable();
             $table->foreign('paciente_perfil_id')->references('id')->on('perfis');
             $table->unsignedBigInteger('medico_perfil_id')->nullable();

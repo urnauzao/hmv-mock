@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\AssociativaEndereco;
+use App\Models\Estabelecimento;
+use App\Models\Perfil;
+use App\Services\AgendamentoService;
 use App\Services\AssociativaEnderecoService;
 use App\Services\EnderecoService;
 use App\Services\EstabelecimentoService;
@@ -87,6 +90,21 @@ Route::get('/questionarios-emergencia', function(Request $request){
 Route::prefix('questionario-emergencia')->group(function () {
     Route::get('/{id}', function($id){
         return QuestionarioEmergenciaService::findJson($id??0);
+    });
+});
+
+Route::get('/agendamentos', function(Request $request){
+    return AgendamentoService::getAll(true);
+});
+Route::prefix('agendamento')->group(function () {
+    Route::get('/paciente/{perfil}', function(Perfil $perfil){
+        return AgendamentoService::getAllByPerfilPaciente($perfil);
+    });
+    Route::get('/medico/{perfil}', function(Perfil $perfil){
+        return AgendamentoService::getAllByPerfilMedico($perfil);
+    });
+    Route::get('/estabelecimento/{estabelecimento}', function(Estabelecimento $estabelecimento){
+        return AgendamentoService::getAllByEstabelecimento($estabelecimento);
     });
 });
 
