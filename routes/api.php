@@ -1,18 +1,21 @@
 <?php
 
-use App\Models\AssociativaEndereco;
-use App\Models\Estabelecimento;
 use App\Models\Perfil;
-use App\Services\AgendamentoService;
-use App\Services\AssociativaEnderecoService;
-use App\Services\EnderecoService;
-use App\Services\EstabelecimentoService;
-use App\Services\PerfilService;
-use App\Services\PerguntaEmergenciaService;
-use App\Services\QuestionarioEmergenciaService;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
+use App\Models\Estabelecimento;
+use App\Services\PerfilService;
 use App\Services\UsuarioService;
+use App\Services\EnderecoService;
+use App\Models\AssociativaEndereco;
+use App\Services\AgendamentoService;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Services\EstabelecimentoService;
+use App\Services\PerguntaEmergenciaService;
+use App\Services\AssociativaEnderecoService;
+use App\Services\QuestionarioEmergenciaService;
+use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +28,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::post('/sanctum/token', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'device_name' => 'required',
+    ]);
+ 
+    $user = Usuario::where('email', $request->email)->first();
+ 
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'email' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+ 
+    return $user->createToken($request->device_name)->plainTextToken;
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/teste', function(Request $request){
+        //auth()->user();
+        return UsuarioService::getAll(true);
+    });
+});
+
+
+
+
 
 Route::get('/usuarios', function(Request $request){
     return UsuarioService::getAll(true);
