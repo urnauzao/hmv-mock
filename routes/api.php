@@ -52,20 +52,37 @@ Route::middleware('auth:sanctum')->group(function () {
         //auth()->user();
         return UsuarioService::getAll(true);
     });
-});
 
+    Route::get('/usuarios', function(Request $request){
+        return UsuarioService::getAll(true);
+    });
+    Route::prefix('usuario')->group(function () {
+        Route::get('/dados', function(){
+            try {
+                return response()->json(auth()->user()?->toArray());           
+            } catch (\Throwable $th) {
+                return response()->json(['success' => false, 'msg' => 'nao encontrado'], 404);
+            }
+        });
 
-
-
-
-Route::get('/usuarios', function(Request $request){
-    return UsuarioService::getAll(true);
-});
-Route::prefix('usuario')->group(function () {
-    Route::get('/{id}', function($id){
-        return UsuarioService::findJson($id??0);
+        Route::get('/{id}', function($id){
+            return UsuarioService::findJson($id??0);
+        });
     });
 });
+
+
+
+
+
+// Route::get('/usuarios', function(Request $request){
+//     return UsuarioService::getAll(true);
+// });
+// Route::prefix('usuario')->group(function () {
+//     Route::get('/{id}', function($id){
+//         return UsuarioService::findJson($id??0);
+//     });
+// });
 
 
 Route::get('/associativa-enderecos', function(Request $request){
