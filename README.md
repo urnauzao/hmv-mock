@@ -1,4 +1,4 @@
-# Intalação do Ambiente sem Docker
+# Instalação do Ambiente sem Docker
 - Requisitos: 
     - PHP 8.0^
     - COMPOSER
@@ -11,7 +11,7 @@ Selecione a versão "VS16 x64 Thread Safe", embora qualquer outra versão sirva.
 
 - Após concluir o download basta descompactar o PHP em alguma pasta de seu sistema.
 
-- Feito isso é preciso habilitar alguma extensões do PHP, como "fileinfo", "pdo_pgsql" e "pgsql". Você pode fazer isso indo direto na pasta onde o php foi extraido e então editar o arquivo "php.ini" ou então você pode copiar este [arquivo php.ini](/git-public/php.ini) e substituir o seu.
+- Feito isso é preciso habilitar alguma extensões do PHP, como "fileinfo", "pdo_pgsql" e "pgsql". Você pode fazer isso indo direto na pasta onde o php foi extraído e então editar o arquivo "php.ini" ou então você pode copiar este [arquivo php.ini](/git-public/php.ini) e substituir o seu.
 
 - Por fim, agora precisamos instalar o Composer, você acessar a página do (Composer)[https://getcomposer.org/download/] para isso ou simplemente [clicar aqui para baixar](https://getcomposer.org/Composer-Setup.exe). 
 - Feito download do Composer, basta o instalar, para isso é importante que realize esses dois passos. Quanto aos demais passos é só dar "next".
@@ -42,14 +42,14 @@ Selecione a versão "VS16 x64 Thread Safe", embora qualquer outra versão sirva.
 - Depois de termos feitas todas as configurações de ambiente, agora precisamos clonar nosso repositório em qualquer pasta de nosso computador.
 - Após clonado acesse a pasta raiz do projeto.
 - Agora vamos duplicar o arquivo ".env.example" e então vamos renomear o arquivo duplicado para ".env".
-    - Neste arquivo ".env" ficam todas as variaveis de ambiente, inclusive as de acesso ao banco de dados.
+    - Neste arquivo ".env" ficam todas as variáveis de ambiente, inclusive as de acesso ao banco de dados.
 - Precisamos abrir um terminal, e nele vamos rodar um comando do Composer para instalar todas as dependências do projeto. Com o terminal aberto execute:
 > composer update
-- Após concluir o download de todas as depências, precisamos rodar um último comando pra finalizar. Cujo qual irá gerar uma chave pra aplicação.
+- Após concluir o download de todas as depedências, precisamos rodar um último comando pra finalizar. Cujo qual irá gerar uma chave pra aplicação.
 > php artisan key:generate 
 
-# Configurando Variaveis de Ambiente
-Acesse o seu arquivo ".env" e então vamos nos concentrar nas seguintes variaveis. Onde devemos informar os dados de acesso ao nosso banco de dados. <b>Atenção:</b> em nosso ambiente só ativamos configuração de acesso a bancos Postgresql. Caso necessite de acesso a outro tipo de banco, certifique-se de ativar as extensões no php.ini de conexão ao banco (<i>Exemplo: mysqli, pdo_mysql, sqlite3, pdo_sqlite, etc...</i>)
+# Configurando Variáveis de Ambiente
+Acesse o seu arquivo ".env" e então vamos nos concentrar nas seguintes variáveis. Onde devemos informar os dados de acesso ao nosso banco de dados. <b>Atenção:</b> em nosso ambiente só ativamos configuração de acesso a bancos Postgresql. Caso necessite de acesso a outro tipo de banco, certifique-se de ativar as extensões no php.ini de conexão ao banco (<i>Exemplo: mysqli, pdo_mysql, sqlite3, pdo_sqlite, etc...</i>)
 - DB_CONNECTION=?
     - Neste item vai o tipo de conexão: pgsql, mysql, sqlite
 - DB_HOST=?
@@ -64,7 +64,7 @@ Acesse o seu arquivo ".env" e então vamos nos concentrar nas seguintes variavei
     - Senha do usuário com acesso ao banco dados
 
 # Executando as Migrations de Banco de Dados
-Depois de configurado as variaveis de ambiente, podemos agora testar nossa configuração com o banco, para isso execute a partir da raiz do projeto:
+Depois de configurado as variáveis de ambiente, podemos agora testar nossa configuração com o banco, para isso execute a partir da raiz do projeto:
 > php artisan migrate:status
 
 Em caso positivo, veremos algo assim:
