@@ -1,64 +1,85 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Intalação do Ambiente sem Docker
+- Requisitos: 
+    - PHP 8.0^
+    - COMPOSER
+    - Habilitar configurações no php.ini
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Windows:
+- [download versão 8.0^](https://windows.php.net/download#php-8.0)
+Selecione a versão "VS16 x64 Thread Safe", embora qualquer outra versão sirva. Opte pelo formato zip.
+![imagem da tela de seleção do arquivo php para download](/git-public/select_php_version_for_windows.png)
 
-## About Laravel
+- Após concluir o download basta descompactar o PHP em alguma pasta de seu sistema.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Feito isso é preciso habilitar alguma extensões do PHP, como "fileinfo", "pdo_pgsql" e "pgsql". Você pode fazer isso indo direto na pasta onde o php foi extraido e então editar o arquivo "php.ini" ou então você pode copiar este [arquivo php.ini](/git-public/php.ini) e substituir o seu.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Por fim, agora precisamos instalar o Composer, você acessar a página do (Composer)[https://getcomposer.org/download/] para isso ou simplemente [clicar aqui para baixar](https://getcomposer.org/Composer-Setup.exe). 
+- Feito download do Composer, basta o instalar, para isso é importante que realize esses dois passos. Quanto aos demais passos é só dar "next".
+    - Devemos selecionar a opção de Developer ao instalar.
+    ![Composer, selecionando a opção developer](/git-public/composer_select_develop_mode.png)
+    - Depois de avançar alguns passos, precisamos nos certificar que a versão do PHP que será utilizada pelo Composer é a mesma que baixamos e configuramos a pouco. Para isso verifique se o caminho na tela de instalação com título "Settings Check" é o mesmo caminho de onde foi extraído o PHP.
+    ![Composer, configurando a versão do PHP vinculada](/git-public/composer_select_version_php.png)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Linux:
+- Instale os seguintes pacotes necessários:
+> sudo apt-get install software-properties-common
+- Em seguida, adicione o repositório do software:
+> sudo add-apt-repository ppa:ondrej/php
 
-## Learning Laravel
+- Depois disso, atualize o APT:
+> sudo apt update
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- E, finalmente, instale o PHP 8 e alguns módulos:
+> sudo apt install php8.0 php8.0-intl php8.0-pgsql php8.0-pdo_pgsql php8.0-gd php8.0-fileinfo
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+- Em seguida, verifique a versão recém-instalada:
+> php -V
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- Agora só falta instalarmos o composer, para isso acesse [Download Composer](https://getcomposer.org/download/) e siga o passo a passo da instalação via command-line.
 
-### Premium Partners
+# Instalando nosso Aplicativo
+- Depois de termos feitas todas as configurações de ambiente, agora precisamos clonar nosso repositório em qualquer pasta de nosso computador.
+- Após clonado acesse a pasta raiz do projeto.
+- Agora vamos duplicar o arquivo ".env.example" e então vamos renomear o arquivo duplicado para ".env".
+    - Neste arquivo ".env" ficam todas as variaveis de ambiente, inclusive as de acesso ao banco de dados.
+- Precisamos abrir um terminal, e nele vamos rodar um comando do Composer para instalar todas as dependências do projeto. Com o terminal aberto execute:
+> composer update
+- Após concluir o download de todas as depências, precisamos rodar um último comando pra finalizar. Cujo qual irá gerar uma chave pra aplicação.
+> php artisan key:generate 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+# Configurando Variaveis de Ambiente
+Acesse o seu arquivo ".env" e então vamos nos concentrar nas seguintes variaveis. Onde devemos informar os dados de acesso ao nosso banco de dados. <b>Atenção:</b> em nosso ambiente só ativamos configuração de acesso a bancos Postgresql. Caso necessite de acesso a outro tipo de banco, certifique-se de ativar as extensões no php.ini de conexão ao banco (<i>Exemplo: mysqli, pdo_mysql, sqlite3, pdo_sqlite, etc...</i>)
+- DB_CONNECTION=?
+    - Neste item vai o tipo de conexão: pgsql, mysql, sqlite
+- DB_HOST=?
+    - URL de acesso ao banco de dados
+- DB_PORT=?
+    - Porta de acesso ao banco de dados
+- DB_DATABASE=?
+    - Nome do banco de dados
+- DB_USERNAME=?
+    - Usuário com acesso ao banco de dados
+- DB_PASSWORD
+    - Senha do usuário com acesso ao banco dados
 
-## Contributing
+# Executando as Migrations de Banco de Dados
+Depois de configurado as variaveis de ambiente, podemos agora testar nossa configuração com o banco, para isso execute a partir da raiz do projeto:
+> php artisan migrate:status
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Em caso positivo, veremos algo assim:
+![exemplo de retorno ao executar php artisan migrate:status](/git-public/migrate_status_example.png)
+Tendo obtido sucesso, agora podemos a executar pra valer:
+> php artisan migrate
 
-## Code of Conduct
+Com esse comando todo nosso banco será criado e já podemos iniciar a aplicação.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Iniciando a Aplicação:
+Com todos os passos acimas tendo sido seguidos e realizados com sucesso, podemos agora iniciar a aplicação utilizando o próprio servidor do Laravel. Para isso execute a partir da pasta raiz:
+> php artisan serve
 
-## Security Vulnerabilities
+Se tudo ocorreu bem, sua aplicação estará rodando a partir de agora.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+![aplicação executando](/git-public/app_start_with_laravel_server.png)
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Para visualizar a aplicação em execução acesse o endereço informado no console.
