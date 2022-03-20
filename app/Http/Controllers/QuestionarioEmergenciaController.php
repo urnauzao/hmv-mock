@@ -86,13 +86,18 @@ class QuestionarioEmergenciaController extends Controller
             $insertsRespostas[] = is_array($resposta)? $resposta : $resposta->toArray();
         }
 
-        $totalSalvo = RespostaPerguntaEmergencia::query()->insert($insertsRespostas);
-        if($totalSalvo){
-            $ultimo_questionario_em_aberto->situacao = 'completo';
-            $ultimo_questionario_em_aberto->save();
-            return HelperService::defaultResponseJson("Suas respostas para o questionário foram salvas com sucesso.", 200, true, ['questionario_id' => $ultimo_questionario_em_aberto->id]);
-        }else{
-            return HelperService::defaultResponseJson("Você foi possível salvar seu questionário de emergência.", 400, false);
+        try {
+            $totalSalvo = RespostaPerguntaEmergencia::query()->insert($insertsRespostas);
+            if($totalSalvo){
+                $ultimo_questionario_em_aberto->situacao = 'completo';
+                $ultimo_questionario_em_aberto->save();
+                return HelperService::defaultResponseJson("Suas respostas para o questionário foram salvas com sucesso.", 200, true, ['questionario_id' => $ultimo_questionario_em_aberto->id]);
+            }else{
+                return HelperService::defaultResponseJson("Você foi possível salvar seu questionário de emergência.", 400, false);
+            }
+        } catch (\Throwable $th) {
+            return HelperService::defaultResponseJson("Algum dos valores informações é inconsistente.", 500, false);
         }
+
     }
 }
