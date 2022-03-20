@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * @param situacao
+ * @param situacao => 'completo', 'incompleto'
  * @param perfil_id
  */
 class QuestionarioEmergencia extends Model

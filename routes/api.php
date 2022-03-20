@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\HabitoSaudeController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\QuestionarioEmergenciaController;
 use App\Http\Controllers\UsuarioController;
 use App\Models\Perfil;
 use App\Models\Usuario;
@@ -70,6 +72,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('paciente')->group(function () {
         // retorna métricas de um usuário como históricos de agendamento, questionários... 
         Route::get('/metricas/{perfil}', [PacienteController::class, 'metricas']);
+    });
+
+    Route::prefix('questionario_emergencia')->group(function(){
+        Route::get('/novo/{perfil}', [QuestionarioEmergenciaController::class, 'index']);
+        Route::post('/novo/{perfil}', [QuestionarioEmergenciaController::class, 'save']);
+    });
+
+    Route::prefix('habito_saude')->group(function(){
+        Route::get('/novo/{perfil}', [HabitoSaudeController::class, 'index']);
+        Route::post('/novo/{perfil}', [HabitoSaudeController::class, 'save']);
     });
 });
 

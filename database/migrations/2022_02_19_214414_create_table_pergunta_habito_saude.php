@@ -20,7 +20,7 @@ return new class extends Migration
                 'string', 'int', 'float', 'bool', 'multi'
             ])->default('string');
             $table->json('opcoes')->nullable();
-            $table->enum('prioridade', [1,2,3,4,5,6,7,8,9,10])->default(1);
+            $table->integer('prioridade')->default(1);
             $table->boolean('obrigatoria')->default(false);
             $table->boolean('ativo')->default(true);
             $table->timestamps();

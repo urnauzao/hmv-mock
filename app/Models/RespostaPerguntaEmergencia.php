@@ -22,6 +22,6 @@ class RespostaPerguntaEmergencia extends Model
         'resposta_texto'
     ];
     protected $casts = [
-        'reposta' => 'array'
+        'resposta' => 'array'
     ];
 }

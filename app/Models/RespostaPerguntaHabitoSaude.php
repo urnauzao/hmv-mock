@@ -16,6 +16,6 @@ class RespostaPerguntaHabitoSaude extends Model
         'resposta_texto'
     ];
     protected $casts = [
-        'reposta' => 'array'
+        'resposta' => 'array'
     ];
 }

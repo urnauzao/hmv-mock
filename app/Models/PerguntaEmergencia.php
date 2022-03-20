@@ -24,4 +24,9 @@ class PerguntaEmergencia extends Model
         'obrigatoria',
         'ativo'
     ];
+
+    protected $cast = [
+        'ativo' => 'boolean'
+    ];
 }
+
