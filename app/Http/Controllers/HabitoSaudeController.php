@@ -93,7 +93,7 @@ class HabitoSaudeController extends Controller
                 $ultimo_habito_saude_em_aberto->save();
                 return HelperService::defaultResponseJson("Suas respostas para o hábito de saúde foram salvas com sucesso.", 200, true, ['habito_saude_id' => $ultimo_habito_saude_em_aberto->id]);
             }else{
-                return HelperService::defaultResponseJson("Você foi possível salvar seu hábito de saúdo.", 400, false);
+                return HelperService::defaultResponseJson("Não foi possível salvar seu hábito de saúdo.", 400, false);
             }
         } catch (\Throwable $th) {
             return HelperService::defaultResponseJson("Algum dos valores informações é inconsistente.", 500, false);

@@ -93,7 +93,7 @@ class QuestionarioEmergenciaController extends Controller
                 $ultimo_questionario_em_aberto->save();
                 return HelperService::defaultResponseJson("Suas respostas para o questionário foram salvas com sucesso.", 200, true, ['questionario_id' => $ultimo_questionario_em_aberto->id]);
             }else{
-                return HelperService::defaultResponseJson("Você foi possível salvar seu questionário de emergência.", 400, false);
+                return HelperService::defaultResponseJson("Não foi possível salvar seu questionário de emergência.", 400, false);
             }
         } catch (\Throwable $th) {
             return HelperService::defaultResponseJson("Algum dos valores informações é inconsistente.", 500, false);
