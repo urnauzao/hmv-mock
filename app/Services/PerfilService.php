@@ -49,4 +49,9 @@ class PerfilService
             return response()->json(["msg" => "Id inválido"], 400);
         }
     }
+
+    public static function findByUsuario(int $usuario_id):array{
+        $result = Perfil::query()->where(['usuario_id' => $usuario_id])->get();
+        return $result->toArray();
+    }
 }

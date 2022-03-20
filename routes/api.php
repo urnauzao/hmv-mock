@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\UsuarioController;
 use App\Models\Perfil;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -28,7 +30,9 @@ use Illuminate\Validation\ValidationException;
 |
 */
 
+// /api/
 
+//LOGIN é FEITO AQUI
 Route::post('/sanctum/token', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
@@ -48,30 +52,30 @@ Route::post('/sanctum/token', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/teste', function(Request $request){
-        //auth()->user();
-        return UsuarioService::getAll(true);
-    });
 
-    Route::get('/usuarios', function(Request $request){
-        return UsuarioService::getAll(true);
-    });
+    // Route::get('/usuarios', function(Request $request){
+    //     return UsuarioService::getAll(true);
+    // });
+
     Route::prefix('usuario')->group(function () {
-        Route::get('/dados', function(){
-            try {
-                return response()->json(auth()->user()?->toArray());           
-            } catch (\Throwable $th) {
-                return response()->json(['success' => false, 'msg' => 'nao encontrado'], 404);
-            }
-        });
+        // retorna o usuário e seus perfis
+        Route::get('/dados', [UsuarioController::class, 'index']);
 
+        // retorna um usuário específico
         Route::get('/{id}', function($id){
             return UsuarioService::findJson($id??0);
-        });
+        })->where('id', '[0-9]+');
+    });
+
+    Route::prefix('paciente')->group(function () {
+        // retorna métricas de um usuário como históricos de agendamento, questionários... 
+        Route::get('/metricas/{perfil}', [PacienteController::class, 'metricas']);
     });
 });
 
 
+
+/*** PRA CIMA ESTÁ VALENDO ^^^^ */
 
 
 

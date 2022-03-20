@@ -25,4 +25,9 @@ class QuestionarioEmergencia extends Model
         return $this->hasMany(RespostaPerguntaEmergencia::class);
     }
 
+    protected $cast = [
+        'updated_at' => 'datetime',
+        'created_at' => 'datetime'
+    ];
+
 }

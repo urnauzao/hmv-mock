@@ -26,4 +26,14 @@ class Agendamento extends Model
         'observacoes',
         'estabelecimento_id'
     ];
+
+    protected $with = ['estabelecimento'];
+
+    /**
+     * Get the author that wrote the book.
+     */
+    public function estabelecimento()
+    {
+        return $this->belongsTo(Estabelecimento::class);
+    }
 }

@@ -16,6 +16,12 @@ class Perfil extends Model
     // ['medico', 'paciente', 'atendente', 'socorrista', 'admin']
     protected $fillable = [
         'tipo',
-        'usuario_id'
+        'usuario_id',
+        'updated_at',
+        'created_at'
+    ];
+
+    protected $cast = [
+        'updated_at' => 'datetime'
     ];
 }
