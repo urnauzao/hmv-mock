@@ -71,24 +71,36 @@ class QuestionarioEmergenciaController extends Controller
         }
 
         if($respostas_ultimo_questionario_em_aberto){
-            $respostas_ultimo_questionario_em_aberto = $respostas_ultimo_questionario_em_aberto->groupBy('pergunta_emergencia_id')->toArray();
+            $respostas_ultimo_questionario_em_aberto = $respostas_ultimo_questionario_em_aberto->groupBy('pergunta_emergencia_id');
         }else{
             $respostas_ultimo_questionario_em_aberto = [];
         }
 
         $insertsRespostas = [];
+        $insertsRespostasUpdate = [];
         foreach($fields as $pergunta_id => $__resposta){
-            $resposta = $respostas_ultimo_questionario_em_aberto[$pergunta_id] ?? new RespostaPerguntaEmergencia();
+            $resposta = $respostas_ultimo_questionario_em_aberto[$pergunta_id][0] ?? new RespostaPerguntaEmergencia();
             $resposta['questionario_emergencia_id'] = $ultimo_questionario_em_aberto['id'];
             $resposta['pergunta_emergencia_id'] = $pergunta_id;
             $resposta['resposta_texto'] = $__resposta;
             $resposta['resposta'] = null;
-            $insertsRespostas[] = is_array($resposta)? $resposta : $resposta->toArray();
+            if($resposta['id']){
+                $insertsRespostasUpdate[] = is_array($resposta)? $resposta : $resposta->toArray();
+            }else{
+                $insertsRespostas[] = is_array($resposta)? $resposta : $resposta->toArray();
+            }
         }
-
         try {
             $totalSalvo = RespostaPerguntaEmergencia::query()->insert($insertsRespostas);
-            if($totalSalvo){
+            foreach($insertsRespostasUpdate as $update){
+                $up = RespostaPerguntaEmergencia::query()->find($update['id']);
+                $up['questionario_emergencia_id'] = $update['questionario_emergencia_id'];
+                $up['pergunta_emergencia_id'] = $update['pergunta_emergencia_id'];
+                $up['resposta_texto'] = $update['resposta_texto'];
+                $up['resposta'] = $update['resposta'];
+                $up->save();
+            }
+            if($totalSalvo || !empty($insertsRespostasUpdate)){
                 $ultimo_questionario_em_aberto->situacao = 'completo';
                 $ultimo_questionario_em_aberto->save();
                 return HelperService::defaultResponseJson("Suas respostas para o questionário foram salvas com sucesso.", 200, true, ['questionario_id' => $ultimo_questionario_em_aberto->id]);
@@ -96,6 +108,7 @@ class QuestionarioEmergenciaController extends Controller
                 return HelperService::defaultResponseJson("Não foi possível salvar seu questionário de emergência.", 400, false);
             }
         } catch (\Throwable $th) {
+            // dd($th,$insertsRespostas);
             return HelperService::defaultResponseJson("Algum dos valores informações é inconsistente.", 500, false);
         }
 

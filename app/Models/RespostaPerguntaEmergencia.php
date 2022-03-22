@@ -16,6 +16,7 @@ class RespostaPerguntaEmergencia extends Model
     use HasFactory;
     protected $table = 'respostas_perguntas_emergencia';
     protected $fillable = [
+        'id',
         'questionario_emergencia_id',
         'pergunta_emergencia_id',
         'resposta',

@@ -77,18 +77,31 @@ class HabitoSaudeController extends Controller
         }
 
         $insertsRespostas = [];
+        $insertsRespostasUpdate = [];
         foreach($fields as $pergunta_id => $__resposta){
-            $resposta = $respostas_ultimo_habito_saude_em_aberto[$pergunta_id] ?? new RespostaPerguntaHabitoSaude();
-            $resposta['habito_saude_id'] = $ultimo_habito_saude_em_aberto->id;
+            $resposta = $respostas_ultimo_habito_saude_em_aberto[$pergunta_id][0] ?? new RespostaPerguntaHabitoSaude();
+            $resposta['habito_saude_id'] = $ultimo_habito_saude_em_aberto['id'];
             $resposta['pergunta_habito_saude_id'] = $pergunta_id;
             $resposta['resposta_texto'] = $__resposta;
             $resposta['resposta'] = null;
-            $insertsRespostas[] = is_array($resposta)? $resposta : $resposta->toArray();
+            if($resposta['id']){
+                $insertsRespostasUpdate[] = is_array($resposta)? $resposta : $resposta->toArray();
+            }else{
+                $insertsRespostas[] = is_array($resposta)? $resposta : $resposta->toArray();
+            }
         }
 
         try {
             $totalSalvo = RespostaPerguntaHabitoSaude::query()->insert($insertsRespostas);
-            if($totalSalvo){
+            foreach($insertsRespostasUpdate as $update){
+                $up = RespostaPerguntaHabitoSaude::query()->find($update['id']);
+                $up['habito_saude_id'] = $update['habito_saude_id'];
+                $up['pergunta_habito_saude_id'] = $update['pergunta_habito_saude_id'];
+                $up['resposta_texto'] = $update['resposta_texto'];
+                $up['resposta'] = $update['resposta'];
+                $up->save();
+            }
+            if($totalSalvo || !empty($insertsRespostasUpdate)){
                 $ultimo_habito_saude_em_aberto->situacao = 'completo';
                 $ultimo_habito_saude_em_aberto->save();
                 return HelperService::defaultResponseJson("Suas respostas para o hábito de saúde foram salvas com sucesso.", 200, true, ['habito_saude_id' => $ultimo_habito_saude_em_aberto->id]);
@@ -96,6 +109,7 @@ class HabitoSaudeController extends Controller
                 return HelperService::defaultResponseJson("Não foi possível salvar seu hábito de saúdo.", 400, false);
             }
         } catch (\Throwable $th) {
+            dd($th,$insertsRespostas);
             return HelperService::defaultResponseJson("Algum dos valores informações é inconsistente.", 500, false);
         }
     }
