@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\HabitoSaudeController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\QuestionarioEmergenciaController;
@@ -72,6 +73,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('paciente')->group(function () {
         // retorna métricas de um usuário como históricos de agendamento, questionários... 
         Route::get('/metricas/{perfil}', [PacienteController::class, 'metricas']);
+        // abre um chamado de emergencia
+        Route::post('/chamado_emergencia/{perfil}', [PacienteController::class, 'chamado_emergencia']);
     });
 
     Route::prefix('questionario_emergencia')->group(function(){
@@ -82,6 +85,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('habito_saude')->group(function(){
         Route::get('/novo/{perfil}', [HabitoSaudeController::class, 'index']);
         Route::post('/novo/{perfil}', [HabitoSaudeController::class, 'save']);
+    });
+
+    Route::prefix('endereco')->group(function(){
+        Route::get('/meus', [EnderecoController::class, 'myEnderecos']);
     });
 });
 

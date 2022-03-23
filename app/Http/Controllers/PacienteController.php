@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AgendamentoSituacaoEnum;
 use App\Models\Perfil;
 use App\Models\Agendamento;
+use App\Models\Estabelecimento;
 use App\Models\HabitoSaude;
 use App\Services\HelperService;
 use Illuminate\Routing\Controller;
 use App\Models\HistoricoAtendimento;
 use App\Models\QuestionarioEmergencia;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PacienteController extends Controller
 {
@@ -46,5 +49,30 @@ class PacienteController extends Controller
         $response['agendamentos']['lista'] = $agendamentos?->take(21)?->toArray() ?? [];
 
         return response()->json($response, 200);
+    }
+
+    public function chamado_emergencia(Request $request, Perfil $perfil):JsonResponse{
+        $request =  $request->all();
+        $agendamento = new Agendamento();
+        $agendamento->situacao = AgendamentoSituacaoEnum::EMERGENCIA;
+        $agendamento->paciente_perfil_id = $perfil->id;
+        $estabelecimento = Estabelecimento::query()
+        ->join('associativa_perfil_estabelecimento', 'associativa_perfil_estabelecimento.estabelecimento_id', 'estabelecimentos.id')
+        ->where('associativa_perfil_estabelecimento.perfil_id', $perfil->id)
+        ->inRandomOrder()
+        ->first();
+        
+        $agendamento->estabelecimento_id = $estabelecimento->id;
+        $agendamento->data = now()->toDateTimeString();
+        $obs = "";
+        if(!empty($request))
+            foreach($request as $key => $req){
+                if(!empty($obs))
+                    $obs.= " | ";
+                $obs .= $key.": ".$req.".";
+            }
+        $agendamento->observacoes = $obs;
+        $agendamento->save();
+        return HelperService::defaultResponseJson("Chamado de emergência realizado com sucesso. Logo nosso equipe chegará até você!", 200, true);
     }
 }
