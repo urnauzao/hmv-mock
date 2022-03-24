@@ -24,4 +24,11 @@ class Perfil extends Model
     protected $cast = [
         'updated_at' => 'datetime'
     ];
+
+    protected $with = ['usuario'];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class);
+    }
 }

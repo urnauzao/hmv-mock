@@ -1,0 +1,28 @@
+version: "3.8"
+#Para servidor Linux
+services:
+  # exemplo início 8 #
+  php8-fpm:
+    image: php-fiap-hmv
+    networks:
+      # - net_swarm
+      - net_db_exemplo
+    # volumes:
+      # - ./App/php8:/var/api_www/php8
+      # - ./Supervisord/php8/:/etc/supervisord.d
+      # - ./Php/php.ini-production:/usr/local/etc/php/php.ini
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
+          cpus: "0.1"
+          memory: 20M
+      restart_policy:
+        condition: on-failure
+  # exemplo fim #
+
+networks:
+  net_db_exemplo:

@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Model;
  * @param Perfil socorrista_perfil_id
  * @param Perfil atendente_perfil_id
  * @param Datetime data
- * @param Enum situacao : '0 -> Agendado, 1 -> Na espera, 2 -> Em realização, 3 -> Realizado, 4 -> Não realizado'
+ * @param Enum situacao : '0 -> Agendado, 1 -> Na espera, 2 -> Em realização, 3 -> Realizado, 4 -> Não realizado', 5 -> 'Emergencia'
  * @param String observacoes
  * @param Estabelecimento estabelecimento_id 
+ * @param string exame
+ * @param Endereco paciente_endereco_id
  */
 class Agendamento extends Model
 {
@@ -28,16 +30,20 @@ class Agendamento extends Model
         'data',
         'situacao',
         'observacoes',
-        'estabelecimento_id'
+        'estabelecimento_id',
+        'exame',
+        'paciente_endereco_id'
     ];
 
-    protected $with = ['estabelecimento'];
+    protected $with = ['estabelecimento', 'perfil'];
 
-    /**
-     * Get the author that wrote the book.
-     */
     public function estabelecimento()
     {
         return $this->belongsTo(Estabelecimento::class);
+    }
+
+    public function perfil()
+    {
+        return $this->belongsTo(Perfil::class,  'paciente_perfil_id', 'id');
     }
 }

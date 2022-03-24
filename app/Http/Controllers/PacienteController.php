@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AgendamentoSituacaoEnum;
 use App\Models\Perfil;
 use App\Models\Agendamento;
+use App\Models\Endereco;
 use App\Models\Estabelecimento;
 use App\Models\HabitoSaude;
 use App\Services\HelperService;
@@ -65,12 +66,15 @@ class PacienteController extends Controller
         $agendamento->estabelecimento_id = $estabelecimento->id;
         $agendamento->data = now()->toDateTimeString();
         $obs = "";
-        if(!empty($request))
-            foreach($request as $key => $req){
-                if(!empty($obs))
-                    $obs.= " | ";
-                $obs .= $key.": ".$req.".";
-            }
+        if(!empty($request) && $request['id'] && Endereco::query()->find($request['id'],['id'])){
+            $agendamento->paciente_endereco_id = $request['id'];
+        }   
+        // GAMBIARRA 
+        // foreach($request as $key => $req){
+        //     if(!empty($obs))
+        //         $obs.= " | ";
+        //     $obs .= $key.": ".$req.".";
+        // }
         $agendamento->observacoes = $obs;
         $agendamento->save();
         return HelperService::defaultResponseJson("Chamado de emergência realizado com sucesso. Logo nosso equipe chegará até você!", 200, true);

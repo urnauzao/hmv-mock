@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AtendenteController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\HabitoSaudeController;
+use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\QuestionarioEmergenciaController;
+use App\Http\Controllers\SocorristaController;
 use App\Http\Controllers\UsuarioController;
 use App\Models\Perfil;
 use App\Models\Usuario;
@@ -90,6 +94,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('endereco')->group(function(){
         Route::get('/meus', [EnderecoController::class, 'myEnderecos']);
     });
+
+    Route::prefix('medico')->group(function(){
+        Route::get('/metricas/{perfil}', [MedicoController::class, 'metricas']);
+        Route::get('/questionario_emergencia/{perfil}', [MedicoController::class, 'verQuestionarioEmergencia']);
+        Route::get('/habito_saude/{perfil}', [MedicoController::class, 'verHabitoSaude']);
+        Route::get('/historico/{perfil}', [MedicoController::class, 'verHistorico']);
+        Route::post('/atendimento/{perfil}', [MedicoController::class, 'concluirAtendimento']);
+    });
+
+    Route::prefix('socorrista')->group(function(){
+        Route::get('/metricas/{perfil}', [SocorristaController::class, 'metricas']);
+    });
+
+    Route::prefix('atendente')->group(function(){
+        Route::get('/metricas/{perfil}', [AtendenteController::class, 'metricas']);
+    });
+
+    Route::prefix('admin')->group(function(){
+        Route::get('/metricas/{perfil}', [AdminController::class, 'metricas']);
+    });
+
+
+
 });
 
 
