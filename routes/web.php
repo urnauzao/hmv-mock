@@ -14,5 +14,43 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        ["GET|HEAD" => "/"],
+        ["GET|HEAD" => "api/admin/metricas/{perfil}"],
+        ["GET|HEAD" => "api/agendamento/estabelecimento/{estabelecimento}"],
+        ["GET|HEAD" => "api/agendamento/medico/{perfil}"],
+        ["GET|HEAD" => "api/agendamento/paciente/{perfil}"],
+        ["GET|HEAD" => "api/agendamentos"],
+        ["GET|HEAD" => "api/associativa-endereco/{id}"],
+        ["GET|HEAD" => "api/associativa-enderecos"],
+        ["GET|HEAD" => "api/atendente/metricas/{perfil}"],
+        ["GET|HEAD" => "api/endereco/meus"],
+        ["GET|HEAD" => "api/endereco/{id}"],
+        ["GET|HEAD" => "api/enderecos"],
+        ["GET|HEAD" => "api/estabelecimento/{id}"],
+        ["GET|HEAD" => "api/estabelecimentos"],
+        ["GET|HEAD" => "api/habito_saude/novo/{perfil}"],
+        ["POST"     => "api/habito_saude/novo/{perfil}"],
+        ["POST"     => "api/medico/atendimento/{perfil}"],
+        ["GET|HEAD" => "api/medico/habito_saude/{perfil}"],
+        ["GET|HEAD" => "api/medico/historico/{perfil}"],
+        ["GET|HEAD" => "api/medico/metricas/{perfil}"],
+        ["GET|HEAD" => "api/medico/questionario_emergencia/{perfil}"],
+        ["POST"     => "api/paciente/chamado_emergencia/{perfil}"],
+        ["GET|HEAD" => "api/paciente/metricas/{perfil}"],
+        ["GET|HEAD" => "api/perfil/{id}"],
+        ["GET|HEAD" => "api/perfis"],
+        ["GET|HEAD" => "api/pergunta-emergencia/{id}"],
+        ["GET|HEAD" => "api/perguntas-emergencia"],
+        ["GET|HEAD" => "api/permissoes-perfis"],
+        ["GET|HEAD" => "api/questionario-emergencia/{id}"],
+        ["GET|HEAD" => "api/questionario_emergencia/novo/{perfil}"],
+        ["POST"     => "api/questionario_emergencia/novo/{perfil}"],
+        ["GET|HEAD" => "api/questionarios-emergencia"],
+        ["POST"     => "api/sanctum/token"],
+        ["GET|HEAD" => "api/socorrista/metricas/{perfil}"],
+        ["GET|HEAD" => "api/usuario/dados"],
+        ["GET|HEAD" => "api/usuario/{id}"],
+        ["GET|HEAD" => "sanctum/csrf-cookie"]
+    ]);
 });

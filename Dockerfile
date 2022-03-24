@@ -34,19 +34,22 @@ COPY ./ /var/www/html/
 WORKDIR /var/www/html/
 RUN cd /var/www/html/
 # RUN touch /var/www/html/.env
-RUN chown www-data: *
-RUN rm -rf composer.lock
-RUN composer install --no-plugins --no-scripts --no-dev
+### RUN chown -r www-data: *
+RUN chmod 755 -R storage/*
+RUN chown -R www-data: storage/*
+### RUN rm -rf composer.lock
+### RUN rm -rf vendor
+RUN composer update --no-plugins --no-scripts --no-dev
 RUN composer dump-autoload
 
 # gera a chave encriptografada do laravel
-RUN php artisan key:generate
+### RUN php artisan key:generate
 
 # acesso o banco de dados e checa se existe as devidas tabelas
-RUN php artisan migrate
+# RUN php artisan migrate
 
 # limpa e carrega os caches recomendados
-RUN php artisan optimize:clear
+### RUN php artisan optimize:clear
 
 # garante a inicialização do cron
 # RUN cron
