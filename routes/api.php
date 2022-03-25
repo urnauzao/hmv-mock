@@ -100,15 +100,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/questionario_emergencia/{perfil}', [MedicoController::class, 'verQuestionarioEmergencia']);
         Route::get('/habito_saude/{perfil}', [MedicoController::class, 'verHabitoSaude']);
         Route::get('/historico/{perfil}', [MedicoController::class, 'verHistorico']);
-        Route::post('/atendimento/{perfil}', [MedicoController::class, 'concluirAtendimento']);
+        Route::post('/relatorio_atendimento/{perfil}', [MedicoController::class, 'concluirAtendimento']);
     });
 
     Route::prefix('socorrista')->group(function(){
-        Route::get('/metricas/{perfil}', [SocorristaController::class, 'metricas']);
+        Route::get('/metricas', [SocorristaController::class, 'metricas']);
     });
 
     Route::prefix('atendente')->group(function(){
-        Route::get('/metricas/{perfil}', [AtendenteController::class, 'metricas']);
+        Route::get('/metricas', [AtendenteController::class, 'metricas']);
+        Route::post('/agendamento/novo/{perfil}', [AtendenteController::class, 'novoAgendamento']);
+        Route::put('/agendamento/situacao/{agendamento}/{situacao}', [AtendenteController::class, 'alterarSituacaoAgendamento']);
+        Route::get('/agendamento/definir_medico/{agendamento}/{perfil}', [AtendenteController::class, 'agendamentoDefinirMedico']);
+        Route::get('/agendamento/estabelecimentos/{perfil}', [AtendenteController::class, 'estabelecimentosParaAgendamento']);
     });
 
     Route::prefix('admin')->group(function(){

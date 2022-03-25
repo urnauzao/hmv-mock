@@ -54,4 +54,8 @@ class PerfilService
         $result = Perfil::query()->where(['usuario_id' => $usuario_id])->get();
         return $result->toArray();
     }
+
+    public static function perfilEhMedico(int $perfil_id):bool{
+        return Perfil::where('usuario_id', $perfil_id)->where('tipo', 'medico')->first() ? true : false;
+    }
 }

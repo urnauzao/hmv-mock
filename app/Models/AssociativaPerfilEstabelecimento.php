@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @param int perfil_id
+ * @param int estabelecimento_id
+ */
 class AssociativaPerfilEstabelecimento extends Model
 {
     use HasFactory;
