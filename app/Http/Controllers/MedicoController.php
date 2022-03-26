@@ -41,14 +41,14 @@ class MedicoController extends Controller
         /** MEUS AGENDAMENTOS E EMERGENCIAS */
         $agendamentos = Agendamento::query()
         ->whereIn('estabelecimento_id', array_keys($meus_estabelecimentos))
-        ->where('medico_perfil_id', $perfil->id )
-        ->whereNotIn('situacao', [3,4])
+        ->where('medico_perfil_id', $perfil->id)
+        ->whereNotIn('situacao', [AgendamentoSituacaoEnum::NAO_REALIZADO,AgendamentoSituacaoEnum::REALIZADO])
         ->where('data', '>', now()->subDay()->toDateString())
         ->where('data', '<', now()->addDays(7))
         ->orWhere(function($query) use ($meus_estabelecimentos) {
                 $query->whereIn('estabelecimento_id', array_keys($meus_estabelecimentos))
                     ->whereNull('medico_perfil_id')
-                    ->whereNotIn('situacao', [3,4])
+                    ->whereNotIn('situacao', [AgendamentoSituacaoEnum::NAO_REALIZADO,AgendamentoSituacaoEnum::REALIZADO])
                     ->where('data', '>', now()->subDay()->toDateString())
                     ->where('data', '<', now()->addDays(7));
         })->get();
@@ -83,10 +83,22 @@ class MedicoController extends Controller
         ->join('respostas_perguntas_emergencia', 'respostas_perguntas_emergencia.questionario_emergencia_id', 'questionarios_emergencia.id' )
         ->join('perguntas_emergencia', 'perguntas_emergencia.id', 'respostas_perguntas_emergencia.pergunta_emergencia_id' )
         ->where('questionarios_emergencia.perfil_id', $perfil->id)
-        ->select('questionarios_emergencia.id as questionario_emergencia_id', 'questionarios_emergencia.created_at','questionarios_emergencia.situacao', 'perguntas_emergencia.pergunta', 'respostas_perguntas_emergencia.resposta_texto')
-        ->get()->groupBy('questionario_emergencia_id');
+        ->select(
+            'questionarios_emergencia.id as questionario_emergencia_id',
+            'questionarios_emergencia.created_at as data_criacao',
+            'questionarios_emergencia.situacao as situacao',
+            'perguntas_emergencia.pergunta as pergunta',
+            'respostas_perguntas_emergencia.resposta_texto as resposta_texto',
+            'perguntas_emergencia.prioridade as prioridade',
+            'respostas_perguntas_emergencia.id as resposta_id'
+        )
+        ->orderBy('questionario_emergencia_id', 'desc')
+        ->orderBy('prioridade', 'desc')
+        ->get();
 
-        return response()->json($questionarios->toArray());
+        $questionarios = $questionarios->groupBy('questionario_emergencia_id');
+
+        return response()->json(array_values($questionarios->toArray()));
     }
 
     public function usuarioEhMedico():bool{
@@ -104,10 +116,22 @@ class MedicoController extends Controller
         ->join('respostas_perguntas_habitos_saude', 'respostas_perguntas_habitos_saude.habito_saude_id', 'habitos_saude.id' )
         ->join('perguntas_habitos_saude', 'perguntas_habitos_saude.id', 'respostas_perguntas_habitos_saude.pergunta_habito_saude_id' )
         ->where('habitos_saude.perfil_id', $perfil->id)
-        ->select('habitos_saude.id as habito_saude_id', 'habitos_saude.created_at','habitos_saude.situacao', 'perguntas_habitos_saude.pergunta', 'respostas_perguntas_habitos_saude.resposta_texto')
-        ->get()->groupBy('habito_saude_id');
+        ->select(
+            'habitos_saude.id as habito_saude_id',
+            'habitos_saude.created_at as data_criacao',
+            'habitos_saude.situacao as situacao',
+            'perguntas_habitos_saude.pergunta as pergunta',
+            'respostas_perguntas_habitos_saude.resposta_texto as resposta_texto',
+            'perguntas_habitos_saude.prioridade as prioridade',
+            'respostas_perguntas_habitos_saude.id as resposta_id'
+        )
+        ->orderBy('habito_saude_id', 'desc')
+        ->orderBy('prioridade', 'desc')
+        ->get();
+        
+        $habitos = $habitos->groupBy('habito_saude_id');
 
-        return response()->json($habitos->toArray());
+        return response()->json(array_values($habitos->toArray()));
     }
     public function verHistorico(Perfil $perfil):JsonResponse{
         if(!$this->usuarioEhMedico()){
@@ -133,7 +157,8 @@ class MedicoController extends Controller
             'agendamentos.exame as exame',
             'usuarios.nome as paciente_nome',
             'usuarios.foto as paciente_foto'
-        )
+        )        
+        ->orderBy('agendamentos.data', 'desc')
         ->get();
 
         return response()->json($historicos->toArray());
@@ -153,7 +178,7 @@ class MedicoController extends Controller
         $historico->paciente_perfil_id = $perfil->id;
         $historico->medico_perfil_id = $this->medico_perfil_id;
         if($historico->save()){
-            Agendamento::query()->find($historico->agendamento_id)->update(['situacao' => '3']);
+            Agendamento::query()->find($historico->agendamento_id)->update(['situacao' => AgendamentoSituacaoEnum::REALIZADO]);
             return response()->json([],201);
         }
         return HelperService::defaultResponseJson("Não foi possível salvar o histórico de atendimento.", 400, false);
