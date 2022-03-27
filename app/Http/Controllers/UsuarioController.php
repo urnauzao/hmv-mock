@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssociativaEndereco;
+use App\Models\AssociativaPerfilEstabelecimento;
 use App\Models\Endereco;
+use App\Models\Estabelecimento;
 use App\Models\Perfil;
 use App\Models\Usuario;
 use App\Services\HelperService;
@@ -62,11 +64,13 @@ class UsuarioController extends Controller
                 $perfil['usuario_id'] = $usuario->id;
                 $perfil->save();
                 $endereco->save();
-                AssociativaEndereco::insert(['endereco_id' => $endereco->id, 'usuario_id' => $usuario->id]);
+                AssociativaEndereco::insert(['endereco_id' => $endereco->id, 'usuario_id' => $usuario->id, 'created_at' => now()->toDateTimeString()]);
+                $estabelecimento = Estabelecimento::query()->find(5);
+                AssociativaPerfilEstabelecimento::insert(['perfil_id' => $perfil->id,'estabelecimento_id' => $estabelecimento->id, 'created_at' => now()->toDateTimeString()]);
                 return response()->json([], 201);
             }
         } catch (\Throwable $th) {
-            return HelperService::defaultResponseJson("Erro ao salvar usuário", 400);
+            return HelperService::defaultResponseJson("Erro ao salvar usuário", 400, false, ['th' => $th]);
         }
     }
 }
