@@ -58,6 +58,8 @@ Route::post('/sanctum/token', function (Request $request) {
     return $user->createToken($request->device_name)->plainTextToken;
 });
 
+Route::post('/register', [UsuarioController::class, "register"]);
+
 Route::middleware('auth:sanctum')->group(function () {
 
     // Route::get('/usuarios', function(Request $request){
@@ -113,6 +115,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/agendamento/situacao/{agendamento}/{situacao}', [AtendenteController::class, 'alterarSituacaoAgendamento']);
         Route::get('/agendamento/definir_medico/{agendamento}/{perfil}', [AtendenteController::class, 'agendamentoDefinirMedico']);
         Route::get('/agendamento/estabelecimentos/{perfil}', [AtendenteController::class, 'estabelecimentosParaAgendamento']);
+        Route::post('/paciente/buscar', [AtendenteController::class, 'pacienteByDoc']);
     });
 
     Route::prefix('admin')->group(function(){

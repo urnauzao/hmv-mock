@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssociativaEndereco;
+use App\Models\Endereco;
+use App\Models\Perfil;
+use App\Models\Usuario;
+use App\Services\HelperService;
 use App\Services\PerfilService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
@@ -19,4 +25,49 @@ class UsuarioController extends Controller
         $usuario['perfis'] = $perfis;
         return response()->json($usuario);
     }
+    
+    public function register(Request $request):JsonResponse{
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $request = $request->all();
+
+        $usuario = new Usuario();
+        $usuario["email"] = $request["email"];
+        $usuario["password"] = Hash::make($request["password"]);
+        $usuario["doc_tipo"] = $request["doc_tipo"];
+        $usuario["doc_numero"] = $request["doc_numero"];
+        $usuario["ativo"] = true;
+        $usuario["nome"] = $request["nome"];
+        $usuario["foto"] = $request["foto"];
+
+        $perfil = new Perfil();
+        $perfil['tipo'] = "paciente";
+
+        $endereco = new Endereco();
+        $endereco["nome"] = $request["endereco"]["nome"];
+        $endereco["tipo"] = $request["endereco"]["tipo"];
+        $endereco["logradouro"] = $request["endereco"]["logradouro"];
+        $endereco["cep"] = $request["endereco"]["cep"];
+        $endereco["numero"] = $request["endereco"]["numero"];
+        $endereco["cidade"] = $request["endereco"]["cidade"];
+        $endereco["estado"] = $request["endereco"]["estado"];
+        $endereco["pais"] = "Brasil"; //$request["endereco"]["pais"];
+        $endereco["complemento"] = $request["endereco"]["complemento"];
+
+        try {
+            if($usuario->save()){
+                $perfil['usuario_id'] = $usuario->id;
+                $perfil->save();
+                $endereco->save();
+                AssociativaEndereco::insert(['endereco_id' => $endereco->id, 'usuario_id' => $usuario->id]);
+                return response()->json([], 201);
+            }
+        } catch (\Throwable $th) {
+            return HelperService::defaultResponseJson("Erro ao salvar usuário", 400);
+        }
+    }
 }
+
