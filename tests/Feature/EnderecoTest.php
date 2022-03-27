@@ -5,11 +5,22 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Endereco;
 use App\Services\EnderecoService;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EnderecoTest extends TestCase
 {
+    public $token = "301|BMwvc41fuEY8vpvJXcnpFcke8sAMVKVlYer6TPIA";
+
+    # php artisan test --filter EnderecoTest::test_consulta_endereco_com_sucesso
+    public function test_consulta_endereco_com_sucesso()
+    {
+        $response = $this
+        ->withToken($this->token )
+        ->get("/api/endereco/meus" );
+
+        $response->assertOk();
+        $response->assertValid();
+    }
+
     # php artisan test --filter EnderecoTest::test_create_endereco
     public function test_create_endereco()
     {

@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Estabelecimento;
 use App\Services\EstabelecimentoService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EstabelecimentoTest extends TestCase

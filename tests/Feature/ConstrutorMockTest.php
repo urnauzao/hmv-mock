@@ -9,8 +9,6 @@ use App\Services\PerfilService;
 use App\Services\UsuarioService;
 use App\Services\PerguntaEmergenciaService;
 use App\Services\AssociativaEnderecoService;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\RespostaPerguntaEmergenciaService;
 
 class ConstrutorMockTest extends TestCase
