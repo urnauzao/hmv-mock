@@ -24,6 +24,7 @@ class UsuarioService{
         $usuario->nome = $faker->name();
         $usuario->foto = "https://picsum.photos/id/".rand(1,1050)."/200";
         $usuario->save();
+        return $usuario;
     }
 
     public static function getAll(bool $json = true){
@@ -41,10 +42,10 @@ class UsuarioService{
             if($result){
                 return response()->json($result->toArray());
             }else{
-                return response()->json(["msg" => "Não encontrado"], 404);
+                return response()->json(["mensagem" => "Não encontrado"], 404);
             }
         } catch (\Throwable $th) {
-            return response()->json(["msg" => "Id inválido"], 400);
+            return response()->json(["mensagem" => "Id inválido"], 400);
         }
     }
 

@@ -56,10 +56,10 @@ class PerguntaEmergenciaService
             if($result){
                 return response()->json($result->toArray());
             }else{
-                return response()->json(["msg" => "Não encontrado"], 404);
+                return response()->json(["mensagem" => "Não encontrado"], 404);
             }
         } catch (\Throwable $th) {
-            return response()->json(["msg" => "Id inválido"], 400);
+            return response()->json(["mensagem" => "Id inválido"], 400);
         }
     }
 }

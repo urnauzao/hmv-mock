@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\PerguntaEmergencia;
 use App\Services\PerguntaEmergenciaService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PerguntaEmergenciaTest extends TestCase

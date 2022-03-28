@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 use App\Services\EstabelecimentoService;
 use App\Services\PerguntaEmergenciaService;
 use App\Services\AssociativaEnderecoService;
+use App\Services\HelperService;
 use App\Services\QuestionarioEmergenciaService;
 use Illuminate\Validation\ValidationException;
 
@@ -46,13 +47,15 @@ Route::post('/sanctum/token', function (Request $request) {
         'password' => 'required',
         'device_name' => 'required',
     ]);
- 
+
     $user = Usuario::where('email', $request->email)->first();
- 
+    $nessage = "Não autorizado.";
+
     if (! $user || ! Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
-        ]);
+        return HelperService::defaultResponseJson(
+            $nessage, 
+            401,
+            false);
     }
  
     return $user->createToken($request->device_name)->plainTextToken;
